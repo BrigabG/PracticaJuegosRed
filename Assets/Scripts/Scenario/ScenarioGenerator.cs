@@ -1,18 +1,28 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class ScenarioGenerator : MonoBehaviour
 {
-    [SerializeField] private GameObject wallPrefab;
-    [SerializeField] private GameObject obstaclePrefab;
+    [SerializeField] private string wallPath = "Prefabs/Wall";
+    [SerializeField] private string obstaclePath = "Prefabs/Obstacle";
+    [SerializeField] private string floorPath = "Prefabs/Floor";
     [SerializeField] private int obstacleCount = 10;
     [SerializeField] private float areaSize = 30f;
     [SerializeField] private float wallThickness = 1f;
     [SerializeField] private float wallHeight = 3f;
 
-    public void Generate(int seed)
+    public void Generate()
     {
+        SpawnFloor();
         SpawnWalls();
-        SpawnObstacles(seed);
+        SpawnObstacles();
+    }
+
+    private void SpawnFloor()
+    {
+        GameObject floor = PhotonNetwork.InstantiateRoomObject(floorPath, Vector3.zero, Quaternion.identity);
+        floor.transform.localScale = new Vector3(areaSize, 0.1f, areaSize);
+        Debug.Log("Piso generado.");
     }
 
     private void SpawnWalls()
@@ -29,14 +39,12 @@ public class ScenarioGenerator : MonoBehaviour
 
     private void SpawnWall(Vector3 position, Vector3 scale)
     {
-        GameObject wall = Instantiate(wallPrefab, position, Quaternion.identity);
+        GameObject wall = PhotonNetwork.InstantiateRoomObject(wallPath, position, Quaternion.identity);
         wall.transform.localScale = scale;
     }
 
-    private void SpawnObstacles(int seed)
+    private void SpawnObstacles()
     {
-        Random.InitState(seed);
-
         float half = areaSize / 2f - 2f;
 
         for (int i = 0; i < obstacleCount; i++)
@@ -47,9 +55,9 @@ public class ScenarioGenerator : MonoBehaviour
                 Random.Range(-half, half)
             );
 
-            Instantiate(obstaclePrefab, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
+            PhotonNetwork.InstantiateRoomObject(obstaclePath, position, Quaternion.Euler(0, Random.Range(0f, 360f), 0));
         }
 
-        Debug.Log("Obstaculos generados: " + obstacleCount + " con seed: " + seed);
+        Debug.Log("Obstaculos generados: " + obstacleCount);
     }
 }
