@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
@@ -8,24 +9,31 @@ public class TankHealth : MonoBehaviourPun, IPunObservable
 
     private int currentHealth;
     private bool isDead;
+    private readonly HashSet<int> processedBulletViewIds = new HashSet<int>();
 
     private void Start()
     {
         currentHealth = maxHealth;
         isDead = false;
+        processedBulletViewIds.Clear();
         Debug.Log(photonView.Owner.NickName + " HP: " + currentHealth);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!photonView.IsMine) return;
+        if (isDead) return;
 
-        TankBullet bullet = other.GetComponent<TankBullet>();
+        TankBullet bullet = other.GetComponentInParent<TankBullet>();
         if (bullet == null) return;
         if (bullet.photonView.Owner == photonView.Owner) return;
 
+        int bulletViewId = bullet.photonView.ViewID;
+        if (bulletViewId != 0 && processedBulletViewIds.Contains(bulletViewId)) return;
+        if (bulletViewId != 0) processedBulletViewIds.Add(bulletViewId);
+
         currentHealth -= 30;
-        Debug.Log(photonView.Owner.NickName + " recibio daño | HP: " + currentHealth);
+        Debug.Log(photonView.Owner.NickName + " recibio danio | HP: " + currentHealth);
 
         if (currentHealth <= 0)
             Die();

@@ -4,7 +4,7 @@ using UnityEngine;
 public class TankShooter : MonoBehaviourPun
 {
     [SerializeField] private Transform firePoint;
-    [SerializeField] private string bulletPath = "Prefabs/TankBullet";
+    [SerializeField] private string bulletPath = "Prefabs/Bullet";
     [SerializeField] private float fireRate = 1f;
 
     private float nextFireTime;
