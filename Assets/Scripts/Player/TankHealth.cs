@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TankHealth : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] private float maxHealth = 100;
-
+    [SerializeField] private Image healthBar;
+    
     private float currentHealth;
     private bool isDead;
     private readonly HashSet<int> processedBulletViewIds = new HashSet<int>();
@@ -22,6 +24,8 @@ public class TankHealth : MonoBehaviourPun, IPunObservable
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+
+        healthBar.fillAmount = currentHealth / maxHealth;
         
         if (currentHealth <= 0) 
             Die();
@@ -36,12 +40,12 @@ public class TankHealth : MonoBehaviourPun, IPunObservable
 
     private void DisableComponents()
     {
-        foreach (Renderer r in GetComponentsInChildren<Renderer>())
-            r.enabled = false;
+        foreach (Transform child in transform)
+            child.gameObject.SetActive(false);
 
-        foreach (Collider c in GetComponentsInChildren<Collider>())
-            c.enabled = false;
-
+        Collider collider = GetComponent<Collider>();
+        if (collider != null) collider.enabled = false;
+        
         TankController controller = GetComponent<TankController>();
         if (controller != null) controller.enabled = false;
 
@@ -58,8 +62,10 @@ public class TankHealth : MonoBehaviourPun, IPunObservable
         }
         else
         {
-            currentHealth = Convert.ToInt32(stream.ReceiveNext());
+            currentHealth = (float)stream.ReceiveNext();
             isDead = (bool)stream.ReceiveNext();
+
+            healthBar.fillAmount = currentHealth / maxHealth;
 
             if (isDead)
                 DisableComponents();
