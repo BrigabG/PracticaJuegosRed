@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  rotateSpeed: 90
+  rotateSpeed: 180
 --- !u!114 &4507022289011306842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +225,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3581257216565222281}
     m_Modifications:
+    - target: {fileID: 9153193403174054448, guid: e0b54de0b7e9eda48b2a9b1b79f96d86,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9153193403174054449, guid: e0b54de0b7e9eda48b2a9b1b79f96d86,
         type: 3}
       propertyPath: m_Pivot.x

@@ -8,34 +8,36 @@ public class TankHealth : MonoBehaviourPun, IPunObservable
 {
     [SerializeField] private float maxHealth = 100;
     [SerializeField] private Image healthBar;
-    
+
+    public bool IsDead { get; private set; }
+    public string OwnerName => photonView.Owner.NickName;
+
     private float currentHealth;
-    private bool isDead;
     private readonly HashSet<int> processedBulletViewIds = new HashSet<int>();
 
     private void Start()
     {
         currentHealth = maxHealth;
-        isDead = false;
+        IsDead = false;
         processedBulletViewIds.Clear();
-        Debug.Log(photonView.Owner.NickName + " HP: " + currentHealth);
     }
 
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-
         healthBar.fillAmount = currentHealth / maxHealth;
-        
-        if (currentHealth <= 0) 
+
+        if (currentHealth <= 0)
             Die();
     }
-    
+
     private void Die()
     {
-        isDead = true;
-        Debug.Log(photonView.Owner.NickName + " eliminado.");
+        if (IsDead) return; // guard double-death
+        IsDead = true;
+        Debug.Log($"[TankHealth] {photonView.Owner.NickName} died. IsMaster: {PhotonNetwork.IsMasterClient}");
         DisableComponents();
+        GameManager.Instance?.NotifyPlayerDied();
     }
 
     private void DisableComponents()
@@ -43,9 +45,9 @@ public class TankHealth : MonoBehaviourPun, IPunObservable
         foreach (Transform child in transform)
             child.gameObject.SetActive(false);
 
-        Collider collider = GetComponent<Collider>();
-        if (collider != null) collider.enabled = false;
-        
+        Collider col = GetComponent<Collider>();
+        if (col != null) col.enabled = false;
+
         TankController controller = GetComponent<TankController>();
         if (controller != null) controller.enabled = false;
 
@@ -58,17 +60,16 @@ public class TankHealth : MonoBehaviourPun, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(currentHealth);
-            stream.SendNext(isDead);
+            stream.SendNext(IsDead);
         }
         else
         {
             currentHealth = (float)stream.ReceiveNext();
-            isDead = (bool)stream.ReceiveNext();
+            IsDead = (bool)stream.ReceiveNext();
 
             healthBar.fillAmount = currentHealth / maxHealth;
 
-            if (isDead)
-                DisableComponents();
+            if (IsDead) DisableComponents();
         }
     }
 }

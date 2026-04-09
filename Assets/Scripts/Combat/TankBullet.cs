@@ -56,9 +56,9 @@ public class TankBullet : MonoBehaviourPun
             if (health.photonView.Owner.Equals(photonView.Owner))
                 return;
             
+            MuteBulletLocally();
             health.TakeDamage(damage);
             
-            MuteBulletLocally();
             if (photonView.IsMine)
                 Invoke(nameof(ReturnBullet), tankHitDelay);
             return;
