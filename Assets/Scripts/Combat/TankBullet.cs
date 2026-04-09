@@ -1,11 +1,13 @@
+using System;
 using Photon.Pun;
 using UnityEngine;
 
 public class TankBullet : MonoBehaviourPun
 {
     [SerializeField] private float speed = 15f;
-    [SerializeField] private float lifetime = 3f;
+    [SerializeField] private float lifetime = 1.5f;
     [SerializeField] private float tankHitDelay = 1f;
+    [SerializeField] private float damage = 30f;
 
     private Renderer bulletRenderer;
     private Collider bulletCollider;
@@ -22,14 +24,17 @@ public class TankBullet : MonoBehaviourPun
         muted = false;
         if (bulletRenderer != null) bulletRenderer.enabled = true;
         if (bulletCollider != null) bulletCollider.enabled = true;
-
-        if (photonView.IsMine)
-            Invoke(nameof(ReturnBullet), lifetime);
     }
 
     private void OnDisable()
     {
         CancelInvoke();
+    }
+
+    private void Start()
+    {
+        if (photonView.IsMine)
+            Invoke(nameof(ReturnBullet), lifetime);
     }
 
     private void Update()
@@ -43,19 +48,19 @@ public class TankBullet : MonoBehaviourPun
     private void OnTriggerEnter(Collider other)
     {
         if (muted) return;
-
+        
         TankHealth health = other.GetComponentInParent<TankHealth>();
 
         if (health != null)
         {
-            if (health.photonView.Owner == photonView.Owner)
+            if (health.photonView.Owner.Equals(photonView.Owner))
                 return;
-
+            
+            health.TakeDamage(damage);
+            
             MuteBulletLocally();
             if (photonView.IsMine)
-            {
                 Invoke(nameof(ReturnBullet), tankHitDelay);
-            }
             return;
         }
 

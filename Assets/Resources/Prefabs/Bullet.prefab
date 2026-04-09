@@ -73,7 +73,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 15
-  lifetime: 3
+  lifetime: 1.5
+  tankHitDelay: 1
+  damage: 30
 --- !u!114 &-6775078006977304350
 MonoBehaviour:
   m_ObjectHideFlags: 0

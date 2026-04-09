@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 7374941216134691698}
   - component: {fileID: 4507022289011306842}
   - component: {fileID: 1828787461064993056}
+  - component: {fileID: 7955608542021611838}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -199,6 +200,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+--- !u!114 &7955608542021611838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6881359397638617237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5abf78033a2575d4298969ae02d22688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _renderers:
+  - {fileID: 2615022825562390063}
+  - {fileID: 6969014937334959957}
+  _enemyMaterial: {fileID: 2100000, guid: 7868d6a54b375334cb712ecd53e83f49, type: 2}
 --- !u!1001 &6021235003005630980
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -316,6 +333,11 @@ PrefabInstance:
       propertyPath: m_UpdateWhenOffscreen
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5532298874511575727, guid: 5e36e3118891c3a47b601fd24eb013ee,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 21edeaa068a7e404f9f678bf742caaf1, type: 2}
     - target: {fileID: -592834460649307093, guid: 5e36e3118891c3a47b601fd24eb013ee,
         type: 3}
       propertyPath: m_Enabled
@@ -346,6 +368,11 @@ PrefabInstance:
       propertyPath: m_AABB.m_Extent.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -592834460649307093, guid: 5e36e3118891c3a47b601fd24eb013ee,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 21edeaa068a7e404f9f678bf742caaf1, type: 2}
     - target: {fileID: 919132149155446097, guid: 5e36e3118891c3a47b601fd24eb013ee,
         type: 3}
       propertyPath: m_Name
@@ -358,9 +385,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e36e3118891c3a47b601fd24eb013ee, type: 3}
+--- !u!137 &2615022825562390063 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -592834460649307093, guid: 5e36e3118891c3a47b601fd24eb013ee,
+    type: 3}
+  m_PrefabInstance: {fileID: 6021235003005630980}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6054245446571859439 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5e36e3118891c3a47b601fd24eb013ee,
+    type: 3}
+  m_PrefabInstance: {fileID: 6021235003005630980}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6969014937334959957 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -5532298874511575727, guid: 5e36e3118891c3a47b601fd24eb013ee,
     type: 3}
   m_PrefabInstance: {fileID: 6021235003005630980}
   m_PrefabAsset: {fileID: 0}
