@@ -17,7 +17,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
+        
+        PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.ConnectUsingSettings();
         Debug.Log("Conectando a Photon...");
     }
@@ -41,6 +42,11 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("Joined Room: " + roomName + ", PlayerCount: " + playerCount);
 
         OnRoom?.Invoke();
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Carrear");
+        }
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
