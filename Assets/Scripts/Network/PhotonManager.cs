@@ -42,11 +42,6 @@ public class PhotonManager : MonoBehaviourPunCallbacks
         Debug.Log("Joined Room: " + roomName + ", PlayerCount: " + playerCount);
 
         OnRoom?.Invoke();
-
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel("Carrear");
-        }
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -56,7 +51,13 @@ public class PhotonManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        Debug.Log("Nuevo jugador entro: " + newPlayer.NickName + " | Total: " + PhotonNetwork.CurrentRoom.PlayerCount);
+        int total = PhotonNetwork.CurrentRoom.PlayerCount;
+        Debug.Log("Nuevo jugador entro: " + newPlayer.NickName + " | Total: " + total);
+
+        if (PhotonNetwork.IsMasterClient && total >= 2)
+        {
+            PhotonNetwork.LoadLevel("Carrear");
+        }
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
