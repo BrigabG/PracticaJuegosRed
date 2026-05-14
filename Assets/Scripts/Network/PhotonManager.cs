@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class PhotonManager : MonoBehaviourPunCallbacks
@@ -32,7 +33,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("En el Lobby");
-        PhotonNetwork.JoinRandomOrCreateRoom(roomName: "My Room");
+        PhotonNetwork.JoinOrCreateRoom(roomName: "My Room 2", new Photon.Realtime.RoomOptions(), TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()
