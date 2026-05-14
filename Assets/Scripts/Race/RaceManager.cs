@@ -1,30 +1,53 @@
+using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class RaceManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private int playersRequired = 2;
     [SerializeField] private float countdownDuration = 5f;
-
     private bool timerStarted = false;
 
-    // Detecta cuando un jugador se une a la sala
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        // Solo el Master Client gestiona el inicio del temporizador
         if (!PhotonNetwork.IsMasterClient || timerStarted) return;
 
-        // Verifica si se alcanzó la cantidad mínima de jugadores
         if (PhotonNetwork.CurrentRoom.PlayerCount >= playersRequired)
         {
             timerStarted = true;
             double startTime = PhotonNetwork.Time + countdownDuration;
-            
-            // Envía el tiempo exacto de inicio a todos los clientes
+
+            // Llama al RPC que ahora vive en ESTE mismo script / GameObject (PhotonView 4)
             photonView.RPC("RPC_StartRaceCountdown", RpcTarget.AllBuffered, startTime);
+        }
+    }
+
+    [PunRPC]
+    private void RPC_StartRaceCountdown(double targetNetworkTime)
+    {
+        StartCoroutine(ExecuteCountdown(targetNetworkTime));
+    }
+
+    private IEnumerator ExecuteCountdown(double targetNetworkTime)
+    {
+        while (PhotonNetwork.Time < targetNetworkTime)
+        {
+            Debug.Log("Cuenta regresiva: " + (targetNetworkTime - PhotonNetwork.Time).ToString("F2") + " segundos");
+            yield return null; // IMPORTANTE: Evita un bucle infinito que congele el juego
+        }
+
+        Debug.Log("¡Carrera iniciada!");
+        EnableAllTanksMovement();
+    }
+
+    private void EnableAllTanksMovement()
+    {
+        // Busca todos los tanques en la escena local y activa su movimiento
+        TankController[] allTanks = FindObjectsOfType<TankController>();
+        foreach (TankController tank in allTanks)
+        {
+            tank.EnableMovement();
         }
     }
 }

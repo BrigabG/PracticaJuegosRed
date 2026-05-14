@@ -30,22 +30,8 @@ public class TankController : MonoBehaviourPun
     }
 
 
-    [PunRPC]
-    private void RPC_StartRaceCountdown(double targetNetworkTime)
+    public void EnableMovement()
     {
-        StartCoroutine(ExecuteCountdown(targetNetworkTime));
-    }
-
-    private IEnumerator ExecuteCountdown(double targetNetworkTime)
-    {
-        while (PhotonNetwork.Time < targetNetworkTime)
-        {
-            Debug.Log("Cuenta regresiva: " + (targetNetworkTime - PhotonNetwork.Time).ToString("F2") + " segundos restantes");
-        }
-
         canMove = true;
-        // Aquí puedes iniciar la carrera
-        Debug.Log("¡Carrera iniciada!");
-        yield return null;
     }
 }
