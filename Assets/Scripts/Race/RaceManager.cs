@@ -2,11 +2,13 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
+using TMPro;
 
 public class RaceManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private int playersRequired = 2;
     [SerializeField] private float countdownDuration = 5f;
+    [SerializeField] private TextMeshProUGUI timerText;
     private bool timerStarted = false;
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -34,9 +36,11 @@ public class RaceManager : MonoBehaviourPunCallbacks
         while (PhotonNetwork.Time < targetNetworkTime)
         {
             Debug.Log("Cuenta regresiva: " + (targetNetworkTime - PhotonNetwork.Time).ToString("F2") + " segundos");
+            timerText.text = $"{(targetNetworkTime - PhotonNetwork.Time).ToString("F2")}";
             yield return null; // IMPORTANTE: Evita un bucle infinito que congele el juego
         }
 
+        timerText.text = string.Empty;
         Debug.Log("¡Carrera iniciada!");
         EnableAllTanksMovement();
     }
