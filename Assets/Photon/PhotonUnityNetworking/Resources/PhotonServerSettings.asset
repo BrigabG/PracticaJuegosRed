@@ -45,6 +45,7 @@ MonoBehaviour:
   - RPC_ResetRound
   - RPC_TakeDamage
   - RPC_ReceiveMessage
+  - RPC_StartRaceCountdown
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
