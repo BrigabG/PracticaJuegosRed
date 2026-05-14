@@ -33,7 +33,8 @@ public class PhotonManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         Debug.Log("En el Lobby");
-        PhotonNetwork.JoinOrCreateRoom(roomName: "My Room 2", new Photon.Realtime.RoomOptions(), TypedLobby.Default);
+        var options = new RoomOptions { MaxPlayers = 2, EmptyRoomTtl = 0 };
+        PhotonNetwork.JoinOrCreateRoom("My Room 2", options, TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()

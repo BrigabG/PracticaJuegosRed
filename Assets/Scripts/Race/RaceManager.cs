@@ -1,6 +1,5 @@
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
 using System.Collections;
 using TMPro;
 
@@ -11,7 +10,7 @@ public class RaceManager : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI timerText;
     private bool timerStarted = false;
 
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    private void Start()
     {
         if (!PhotonNetwork.IsMasterClient || timerStarted) return;
 
@@ -19,8 +18,6 @@ public class RaceManager : MonoBehaviourPunCallbacks
         {
             timerStarted = true;
             double startTime = PhotonNetwork.Time + countdownDuration;
-
-            // Llama al RPC que ahora vive en ESTE mismo script / GameObject (PhotonView 4)
             photonView.RPC("RPC_StartRaceCountdown", RpcTarget.AllBuffered, startTime);
         }
     }
@@ -41,7 +38,7 @@ public class RaceManager : MonoBehaviourPunCallbacks
         }
 
         timerText.text = string.Empty;
-        Debug.Log("¡Carrera iniciada!");
+        Debug.Log("ï¿½Carrera iniciada!");
         EnableAllTanksMovement();
     }
 

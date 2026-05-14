@@ -9,6 +9,12 @@ public class PlayerSpawner : MonoBehaviour
 
     private void Start()
     {
+        if (PhotonNetwork.InRoom)
+        {
+            SpawnPlayer();
+            return;
+        }
+
         if (PhotonManager.Instance == null)
         {
             Debug.LogError("PlayerSpawner: No hay instancia de PhotonManager en escena.");
@@ -32,9 +38,9 @@ public class PlayerSpawner : MonoBehaviour
             return;
         }
 
-        if (spawnPoints == null || spawnPoints.Length < 3)
+        if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            Debug.LogError("PlayerSpawner: Asigna 3 spawnPoints en el Inspector.");
+            Debug.LogError("PlayerSpawner: Asigna al menos 1 spawnPoint en el Inspector.");
             return;
         }
 
